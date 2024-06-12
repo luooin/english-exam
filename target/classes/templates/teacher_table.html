@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="admin::header">
+</head>
+<section>
+    <script>
+        //修改user
+        updateUser = function (id) {
+            $.ajax({
+                type: "POST",
+                data: {id: id},
+                url: "/exam/user/getUser",
+                dataType: "json",
+                success: function (data) {
+                    if (data == null) {
+                        window.location.href = ("/exam/user/getAllUser?condition&info");
+                    } else {
+                        $("#id").val(data.id);
+                        $("#username").val(data.username);
+                        $("#name").val(data.name);
+                        $("#email").val(data.email);
+                        $("#role").val(data.role);
+                        $("#modal-update").modal();
+                    }
+                }
+            });
+        }
+        updateConfirm = function () {
+            $.ajax({
+                type: "POST",
+                url: "/exam/user/update",
+                data: {
+                    id: $("#id").val(),
+                    username: $("#username").val(),
+                    name: $("#name").val(),
+                    email: $("#email").val(),
+                    role: $("#role").val()
+                },
+                dataType: "json",
+                success: function (data) {
+                    if (data == null) {
+                        alert("修改失败！请联系管理员...");
+                    } else {
+                        $.each(data, function (key, value) {
+                            alert(value);
+                        })
+                    }
+                    $("#modal-update").modal('hide');
+                    window.location.href = ("/exam/user/getAllUser?condition&info");
+                }
+            });
+        }
+        //删除user
+
+        // 添加用户
+        addModel = function () {
+            if ($("#addName").val()==""){
+                alert("姓名不能为空！");
+                return;
+            }
+            if ($("#addUsername").val()==""){
+                alert("学号不能为空！");
+                return;
+            }
+            if ($("#addPassword").val()==""){
+                alert("密码不能为空！");
+                return;
+            }
+            if ($("#addEmail").val()==""){
+                alert("邮箱不能为空！");
+                return;
+            }
+            var email = $("#addEmail").val();
+            if(!email.match(/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/))
+            {
+                alert("邮箱格式不正确！请重新输入");
+                return;
+            }
+            $.ajax({
+                type:"POST",
+                url:"/exam/user/addUser",
+                data:{
+                    name:$("#addName").val(),
+                    username:$("#addUsername").val(),
+                    password:$("#addPassword").val(),
+                    email:$("#addEmail").val(),
+                    role:$("#addRole").val()
+                },
+                dataType:"json",
+                success:function (data) {
+                    if (data == null){
+                        alert("添加失败，请联系管理员...");
+                    } else {
+                        $.each(data,function (key,value) {
+                            alert(value);
+                            $("#model-add").modal('hide');
+                            window.location.href = ("/exam/user/getAllUser?condition&info");
+                        })
+                    }
+                }
+            });
+        }
+        //分页查询
+        getUserListByPage = function (currentPage) {
+            var pageSize = $("#pageSize").val(); //每页显示条数
+            var condition = $("#condition").val();//用户信息
+            var info = $("#info").val();//搜索
+            var str = "/exam/user/getAllUser?currentPage="+currentPage+"&pageSize="+ pageSize+"&condition="+ condition+"&info="+ info;
+            window.location.href = (str);
+        }
+        getUserListByPageSize = function (pageSize) {
+            var currentPage = $("#pageNum").val();//当前页
+            var condition = $("#condition").val();//用户信息
+            var info = $("#info").val();//搜索
+            var str = "/exam/user/getAllUser?currentPage="+currentPage+"&pageSize="+ pageSize+"&condition="+ condition+"&info="+ info;
+            window.location.href = (str);
+        }
+    </script>
+</section>
+<body class="sidebar-fixed header-fixed">
+<div class="page-wrapper">
+    <!--导入上边栏-->
+    <nav class="navbar page-header" th:include="admin::admin-navbar"></nav>
+    <!--导入侧边栏-->
+    <div class="main-container">
+        <div class="sidebar" th:include="admin::admin-sidebar">
+        </div>
+
+        <div class="content">
+            <h1 style="text-align: center;font-size: 30px">考生列表</h1>
+            <div class="container" style="margin-top:100px;text-align: center;margin-bottom: 100px">
+                <div class="col-md-5">
+                    <form th:action="@{/user/getAllUser}" th:method="post">
+                        <div class="input-group">
+                            <!--<label style="font-size: 20px">考生&nbsp;&nbsp;&nbsp;</label>-->
+                            <select id="condition" name="condition">
+                                <option value="0" th:selected="${condition}=='0'">姓名</option>
+                                <option value="1" th:selected="${condition}=='1'">学号</option>
+                                <option value="2" th:selected="${condition}=='2'">邮箱</option>
+                            </select>
+                            <input type="text" id="info" name="info" th:value="${info}" class="form-control" placeholder="请输入信息">&nbsp;&nbsp;
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-primary"><i class="fa "></i> 搜索考生</button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-light">
+                            考生列表&nbsp;&nbsp;&nbsp;&nbsp;
+                            <!--<button class="btn btn-outline-success" data-toggle="modal" data-target="#modal-add">添加</button>-->
+                        </div>
+
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>姓名</th>
+                                        <th>学号</th>
+                                        <th>邮箱</th>
+                                        <th>角色</th>
+                                        <!--<th>操作</th>-->
+                                    </tr>
+                                    </thead>
+                                    <tbody th:each="user,userStat:${pageInfo.list}">
+                                    <tr>
+                                        <td th:text="${pageInfo.startRow + userStat.index}">1</td>
+                                        <td class="text-nowrap" th:text="${user.name}">Samsung Galaxy S8</td>
+                                        <td th:text="${user.username}">31,589</td>
+                                        <td th:text="${user.email}">$800</td>
+                                        <td th:text="${user.role}==0?'学生':'教师'"></td>
+                                        <!--<td>-->
+                                            <!--<button id="update-btn" class="btn btn-outline-primary"-->
+                                                    <!--th:onclick="'javascript:updateUser('+${user.id}+');'">修改-->
+                                            <!--</button>-->
+                                        <!--</td>-->
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="fixed-table-pagination" style="display: block;text-align: right" >
+                <div class="pull-left pagination-detail">
+                    <span class="pagination-info">显示第 <span th:text="${pageInfo.startRow}"></span> 到第 <span th:text="${pageInfo.endRow}"></span> 条记录，总共 <span th:text="${pageInfo.total}"></span>条记录</span>
+                    <span class="page-list">每页显示
+                         <span class="page-size"  th:text="${pageInfo.pageSize}" id="pageSize"></span>
+                        <!--<span class="btn-group dropdown" style="">-->
+                            <!--<button type="button" class="btn btn-default  dropdown-toggle" data-toggle="dropdown">-->
+                                <!--<span class="page-size"  th:text="${pageInfo.pageSize}" id="pageSize"></span>-->
+                                <!--&lt;!&ndash;保存当前页&ndash;&gt;-->
+                                <!--<input type="hidden" id="pageNum" th:value="${pageInfo.pageNum}" />-->
+                                 <!--<span class="caret"></span>-->
+                             <!--</button>-->
+                            <!--<ul class="dropdown-menu" role="menu">-->
+                                <!--<li  th:class="${pageInfo.pageSize== 5 }?'active':''"><a href="javascript:void(0)" th:onclick="'javascript:getUserListByPageSize('+5+')'" >5</a></li>-->
+                                <!--<li  th:class="${pageInfo.pageSize== 8 }?'active':''"><a href="javascript:void(0)" th:onclick="'javascript:getUserListByPageSize('+8+')'">8</a></li>-->
+                            <!--</ul>-->
+                         <!--</span>-->
+                        条记录
+	                </span>
+
+                </div>
+            </div>
+            <nav aria-label="Page navigation" style="font-size: 20px;text-align: center">
+                <ul class="pager" id="page">
+                    <li th:class="${pageInfo.hasPreviousPage}?'':'previous disabled'" style="display: inline">
+                        <!--<a th:href="@{/user/getAllUser(currentPage=${pageInfo.prePage})}" aria-label="Previous">-->
+                            <!--<span aria-hidden="true">&laquo;</span>-->
+                            <!--&lt;!&ndash;← Previous&ndash;&gt;-->
+                        <!--</a>-->
+                        <a href="javascript:void(0)" th:onclick="'javascript:getUserListByPage('+${pageInfo.prePage}+');'" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <!--← Previous-->
+                        </a>
+                    </li>
+                    <th:block th:each="nav:${pageInfo.navigatepageNums}">
+                        <li th:class="${nav==pageInfo.pageNum}?'active':''" style="display: inline">
+                            <a href="javascript:void(0)" th:onclick="'javascript:getUserListByPage('+${nav}+');'" th:text="${nav}"></a>
+                        </li>
+                    </th:block>
+                    <li th:class="${pageInfo.hasNextPage}?'':'next disabled'" style="display: inline">
+                        <!--<a th:href="@{/user/getAllUser(currentPage=${pageInfo.nextPage},condition=null,info=null)}" aria-label="Next">-->
+                            <!--&lt;!&ndash;Next →&ndash;&gt;-->
+                            <!--<span aria-hidden="true">&raquo;</span>-->
+                        <!--</a>-->
+                        <a href="javascript:void(0)" th:onclick="'javascript:getUserListByPage('+${pageInfo.nextPage}+');'" aria-label="Next">
+                            <!--Next →-->
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+    </div>
+
+    </div>
+</div>
+<div class="modal fade" id="modal-update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary border-0">
+                <h5 class="modal-title text-white">用户修改</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!--输入框-->
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="id" class="form-control-label">序号</label>
+                            <input id="id" class="form-control" value="" readonly/>
+                        </div>
+                        <div class="form-group">
+                            <label for="username" class="form-control-label">学号</label>
+                            <input id="username" class="form-control" value=""/>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="form-control-label">姓名</label>
+                            <input id="name" class="form-control" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="form-control-label">邮箱</label>
+                            <input id="email" class="form-control" value="" type="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="role">角色</label>
+                            <select id="role" class="form-control" readonly>
+                                <option value="0">学生</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" th:onclick="'javascript:updateConfirm()'">Continue
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal-add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-success border-0">
+                <h5 class="modal-title text-white">添加用户</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body p-5">
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label for="addName" class="form-control-label">姓名</label>
+                            <input id="addName" class="form-control" value="" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="addUsername" class="form-control-label">学号</label>
+                            <input id="addUsername" class="form-control" value="" required/>
+                        </div>
+                        <div class="form-group">
+                            <label for="addPassword" class="form-control-label">密码</label>
+                            <input type="password" id="addPassword" class="form-control" value="" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="addEmail" class="form-control-label">邮箱</label>
+                            <input type="email" id="addEmail" class="form-control" value="" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="addRole">角色</label>
+                            <select id="addRole" class="form-control" required>
+                                <option value="0">学生</option>
+                                <option value="1">教师</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success" th:onclick="'javascript:addModel()'">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

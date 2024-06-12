@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="admin::header">
+</head>
+<section>
+    <script>
+        updateInfo = function () {
+            //判空
+            if ($("#name").val()==""){
+                alert("姓名不能为空！");
+                return;
+            }
+            if ($("#email").val()==""){
+                alert("邮箱不能为空！");
+                return;
+            }
+            var email = $("#email").val();
+            if (!email.match(/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/)){
+                alert("邮箱格式不正确！");
+                return;
+            }
+            $.ajax({
+                type:"post",
+                url:"/exam/common/updateInfo",
+                data:{
+                    name:$("#name").val(),
+                    email:$("#email").val()
+                },
+                dataType:"json",
+                success:function (data) {
+                    if (data == null){
+                        alert("您未登录，请先登录！");
+                        window.location.href = ("/exam/page/login");
+                    }else {
+                        $.each(data,function (key,value) {
+                            alert(value);
+                            $("#name").val("");
+                            $("#email").val("");
+                            window.location.href = ("/exam/page/settings");
+                        });
+                    }
+                }
+            });
+        }
+    </script>
+</section>
+<body class="sidebar-fixed header-fixed">
+<div class="page-wrapper">
+    <!--导入上边栏-->
+    <nav class="navbar page-header" th:include="admin::admin-navbar"></nav>
+    <!--导入侧边栏-->
+    <div class="main-container">
+        <div class="sidebar" th:include="admin::admin-sidebar"></div>
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header bg-light">
+                                账户管理
+                            </div>
+
+                            <div class="card-body">
+                                <div class="row mb-5">
+                                    <div class="col-md-4 mb-4">
+                                        <div>Profile Information</div>
+                                        <br />
+                                        <div class="text-muted small">在这里，你可以修改和查看你的信息</div>
+                                    </div>
+
+                                    <div class="col-md-8">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="name" class="form-control-label">姓名</label>
+                                                    <input id="name" class="form-control" th:value="${session.role.name}" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="username" class="form-control-label">用户名</label>
+                                                    <input id="username" class="form-control" th:value="${session.role.username}" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="email" class="form-control-label">邮箱</label>
+                                                    <input type="email" id="email" class="form-control" th:value="${session.role.email}" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                            </div>
+
+                            <div class="card-footer bg-light text-right">
+                                <button type="submit" class="btn btn-primary" th:onclick="'javascript:updateInfo()'">Save Changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

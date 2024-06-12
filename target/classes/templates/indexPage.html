@@ -1,0 +1,48 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="student::header">
+</head>
+<body class="sidebar-fixed header-fixed">
+<div class="page-wrapper">
+    <nav class="navbar page-header" th:include="student::student-navbar"></nav>
+
+    <div class="main-container">
+        <div class="sidebar" th:include="student::student-sidebar"></div>
+        <div class="content">
+            <div class="row"style="margin-bottom: 50px;">
+                <div class="col-md-12 text-center">
+                    <h1 th:text="${exam.examName}"></h1>
+                </div>
+            </div>
+            <div class="row" style="margin-bottom: 100px;">
+                <div class="col-md-4 col-md-offset-12" style="margin:0 auto">
+                    <!-- Start Sign In Form -->
+                    <form th:action="@{/user/login}" class="fh5co-form animate-box" data-animate-effect="fadeIn"
+                          th:method="post">
+                        <h4 class="form-title hidden-xs">请输入您的身份信息</h4>
+                        <div class="form-group">
+                            <!--<label for="username" class="form-control-label">学号: </label>-->
+                            <input id="username" type="text" class="form-control" placeholder="学号" required="required" autofocus="autofocus"/>
+                        </div>
+                        <div class="form-actions submit">
+                            <button class="btn btn-primary">
+                                提交信息，开始考试
+                            </button>
+                        </div>
+                    </form>
+                    <!-- END Sign In Form -->
+
+                </div>
+            </div>
+            <!--系统信息-->
+            <div class="row" style="margin-top: 40px;">
+                <p class="col-xs-12 col-sm-12 text-center slogan">
+                    大学生考试系统 </p>
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

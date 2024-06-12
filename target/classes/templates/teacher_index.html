@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="admin::header">
+</head>
+<body class="sidebar-fixed header-fixed">
+<div class="page-wrapper">
+    <!--导入上边栏-->
+    <nav class="navbar page-header" th:include="admin::admin-navbar"></nav>
+
+    <div class="main-container">
+        <!--导入侧边栏-->
+        <div class="sidebar" th:include="admin::admin-sidebar"></div>
+
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header bg-light">
+                                首页
+                            </div>
+
+                            <div class="card-body">
+                                欢迎教师&nbsp;&nbsp;<span class="hidden-sm hidden-xs" th:text="${session.role.name}"> </span>&nbsp;&nbsp;大学生英语考试系统
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-light">
+                                快速导航
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card p-4" style="background-color: #F8F9FA">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <!--<span class="h4 d-block font-weight-normal mb-2">54</span>-->
+                                    <span class="font-weight-light"><a href="add_exam.html" th:href="@{/exam/select(exam_name=null)}">查看试卷</a></span>
+                                </div>
+
+                                <div class="h2 text-muted">
+                                    <i class="icon icon-people"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card p-4" style="background-color: #F8F9FA">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <!--<span class="h4 d-block font-weight-normal mb-2">54</span>-->
+                                    <span class="font-weight-light"><a href="add_exam.html" th:href="@{/page/addExam}">新增试卷</a></span>
+                                </div>
+
+                                <div class="h2 text-muted">
+                                    <i class="icon icon-people"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card p-4" style="background-color: #F8F9FA">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <!-- <span class="h4 d-block font-weight-normal mb-2">$32,400</span> -->
+                                    <span class="font-weight-light"><a href="add_model.html" th:href="@{/page/addModel}">新增试题</a></span>
+                                </div>
+
+                                <div class="h2 text-muted">
+                                    <i class="icon icon-clock"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card p-4" style="background-color: #F8F9FA">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <!-- <span class="h4 d-block font-weight-normal mb-2">$32,400</span> -->
+                                    <span class="font-weight-light"><a href="admin_table.html" th:href="@{/user/getAllUser(condition=null,info=null)}">用户管理</a></span>
+                                </div>
+
+                                <div class="h2 text-muted">
+                                    <i class="icon icon-clock"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card p-4" style="background-color: #F8F9FA">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <!-- <span class="h4 d-block font-weight-normal mb-2">$32,400</span> -->
+                                    <span class="font-weight-light"><a href="admin_table.html" th:href="@{/user/getAllUser(condition=null,info=null)}">统计分析</a></span>
+                                </div>
+
+                                <div class="h2 text-muted">
+                                    <i class="icon icon-clock"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-light">
+                                最近考试
+                            </div>
+
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>试卷名称</th>
+                                            <th>组卷类型</th>
+                                            <th>所需时间</th>
+                                            <th>发布者</th>
+                                            <th>试卷总分</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody th:each="exam:${session.list}">
+                                        <tr>
+                                            <td class="text-nowrap" th:text="${exam.examName}">Samsung Galaxy S8</td>
+                                            <td th:text="${exam.examType}==0?'固定':'随机'">31,589</td>
+                                            <td th:text="${exam.needTime}+'分钟'">$800</td>
+                                            <td th:text="${exam.examAuthor}"></td>
+                                            <td th:text="${exam.examGrade}"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-light">
+                                题库信息
+                            </div>
+
+                            <div class="card-body">
+                                试卷总数 &nbsp;&nbsp;<span class="hidden-sm hidden-xs" th:text="${session.map[examCount]}"> </span>
+                            </div>
+                            <div class="card-body">
+                                题库总数 &nbsp;&nbsp;<span class="hidden-sm hidden-xs" th:text="${session.map[modelCount]}"> </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--进入用户面板-->
+                <div class="row" style="margin-top: 60px;">
+                    <p class="col-xs-12 col-sm-12 text-center slogan" style="margin-bottom: 20px">
+                        大学生英语考试系统 </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

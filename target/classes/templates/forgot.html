@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="first::header">
+</head>
+<!--<section>-->
+    <!--<script>-->
+        <!--sendEmail = function () {-->
+
+            <!--if ($("#email").val() == ""){-->
+                <!--alert("邮箱不能为空");-->
+                <!--return;-->
+            <!--}-->
+            <!--$.ajax({-->
+                <!--type:"POST",-->
+                <!--url:"/exam/common/sendEmail",-->
+                <!--data:{-->
+                    <!--email:$("#email").val()-->
+                <!--},-->
+                <!--dataType:"json",-->
+                <!--success:function (data) {-->
+                    <!--if (data != null){-->
+                        <!--$.each(data,function (key,value) {-->
+                            <!--alert(value);-->
+                        <!--});-->
+                    <!--}-->
+                <!--}-->
+            <!--});-->
+        <!--}-->
+    <!--</script>-->
+<!--</section>-->
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 text-center">
+        </div>
+    </div>
+    <div class="row" style="margin-top: 100px">
+        <div class="col-md-4 col-md-offset-4">
+            <!-- Start Sign In Form -->
+            <form class="fh5co-form animate-box" data-animate-effect="fadeIn" th:action="@{/common/sendEmail}" th:method="post">
+                <h2>Forgot Password</h2>
+                <div class="form-group">
+                    <div class="alert alert-success" role="alert" th:text="${userSendEmail}==null?'Your email has been sent.':${userSendEmail}"></div>
+                </div>
+                <div class="form-group">
+                    <label for="email" class="sr-only">Email</label>
+                    <input type="email" class="form-control" id="email" placeholder="Email" autocomplete="off" name="email">
+                </div>
+                <div class="form-group">
+                    <p><a href="login.html" th:href="@{/page/login}">Sign In&nbsp;&nbsp;</a>
+                        or <a href="register.html" th:href="@{/page/register}">&nbsp;&nbsp;Sign Up</a>
+                    </p>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Send Email" class="btn btn-primary">
+                </div>
+            </form>
+            <!-- END Sign In Form -->
+        </div>
+    </div>
+    <div th:include="first::footer" style="margin-top: 100px"></div>
+</div>
+</body>
+</html>
+

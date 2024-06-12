@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="header">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>英语在线考试系统</title>
+    <link rel="shortcut icon" href="../static/favicon.ico">
+    <link rel="stylesheet" href="../static/vendor/simple-line-icons/css/simple-line-icons.css">
+    <link rel="stylesheet" href="../static/vendor/font-awesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="../static/css/styles.css">
+    <!--<link rel="stylesheet" href="../static/css/bootstrap.min.css">-->
+    <script src="../static/vendor/jquery/jquery.min.js"></script>
+    <script src="../static/vendor/popper.js/popper.min.js"></script>
+    <script src="../static/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../static/vendor/chart.js/chart.min.js"></script>
+    <script src="../static/js/carbon.js"></script>
+    <script src="../static/js/demo.js"></script>
+
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="../static/css/reset.css">
+    <script src="../static/js/easySlider.js"></script>
+
+    <script type="text/javascript" src="../static/ckeditor/ckeditor.js"></script>
+
+    <script type="text/javascript" src="../static/js/jquery.cookie.js"></script>
+
+    <link rel="stylesheet" href="../static/css/iconfont.css">
+
+    <script type="text/javascript" src="../static/js/echarts.common.js"></script>
+</head>
+<body>
+<div class="page-wrapper flex-row align-items-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12 text-center">
+                <span class="display-1 d-block">404</span>
+                <div class="mb-4">The page you are looking for was not found.</div>
+                <a href="#" class="btn btn-link">Back to Home</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!--上边栏-->
+<nav class="navbar page-header" th:fragment="admin-navbar">
+    <a href="#" class="btn btn-link sidebar-mobile-toggle d-md-none mr-auto">
+        <i class="fa fa-bars"></i>
+    </a>
+
+    <a class="navbar-brand" th:href="@{/page/login}">
+        <img src="../static/imgs/logo.png" alt="logo">
+    </a>
+
+    <a href="#" class="btn btn-link sidebar-toggle d-md-down-none">
+        <i style="font-size: 30px">&laquo;</i>
+    </a>
+
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
+               aria-expanded="false">
+                <img src="../static/imgs/avatar-1.png" class="avatar avatar-sm" alt="logo">
+                <span class="small ml-1 d-md-down-none" th:text="${session.role.name}">Teacher</span>
+            </a>
+
+            <div class="dropdown-menu dropdown-menu-right">
+                <div class="dropdown-header">Settings</div>
+
+                <a href="settings.html" th:href="@{/page/settings}" class="dropdown-item">
+                    <i class="iconfont icon-icon-profile"></i> 账户管理
+                </a>
+
+                <a href="update_password.html" th:href="@{/page/updatePassword}" class="dropdown-item">
+                    <i class="iconfont icon-icon-re-password"></i> 修改密码
+                </a>
+
+                <a href="#" th:href="@{/common/logout}" class="dropdown-item">
+                    <i class="iconfont icon-icon-logout"></i> 退出登录
+                </a>
+            </div>
+        </li>
+    </ul>
+</nav>
+
+<!--侧边栏-->
+<div th:fragment="admin-sidebar">
+    <nav class="sidebar-nav">
+        <ul class="nav">
+            <li class="nav-title">Navigation</li>
+
+            <li class="nav-item nav-dropdown">
+                <a href="#" class="nav-link nav-dropdown-toggle">
+                    <i class="iconfont icon-exam"></i> 试卷管理 <i class="fa">&raquo;</i>
+                </a>
+
+                <ul class="nav-dropdown-items">
+                    <li class="nav-item">
+                        <a href="add_exam.html" th:href="@{/page/addExam}" class="nav-link">
+                            <i class="icon"></i> 新增试卷
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="model_list.html" th:href="@{/exam/select(exam_name=null)}" class="nav-link">
+                            <i class="icon"></i> 查看试卷
+                        </a>
+
+                    </li>
+                </ul>
+            </li>
+
+            <li class="nav-item nav-dropdown">
+                <a href="#" class="nav-link nav-dropdown-toggle">
+                    <i class="iconfont icon-model"></i> 题库管理 <i class="fa">&raquo;</i>
+                </a>
+
+                <ul class="nav-dropdown-items">
+                    <li class="nav-item">
+                        <a href="add_model.html" th:href="@{/page/addModel}" class="nav-link">
+                            <i class="icon"></i> 新增试题
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="model_list.html" th:href="@{/model/select(title=null,type=null)}" class="nav-link">
+                            <i class="icon"></i> 试题分类
+                        </a>
+
+                    </li>
+
+                    <!--<li class="nav-item">-->
+                        <!--<a href="#" class="nav-link">-->
+                            <!--<i class="icon"></i> 导入试题-->
+                        <!--</a>-->
+                    <!--</li>-->
+                </ul>
+            </li>
+
+            <li class="nav-item">
+                <a href="table.html" th:href="@{/user/getAllUser(condition=null,info=null)}" class="nav-link">
+                    <i class="iconfont icon-user"></i> 用户管理
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="table.html" th:href="@{/grade/getGradeVo(condition=null,info=null)}" class="nav-link">
+                    <i class="iconfont icon-record"></i> 考试记录
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="exam_chart.html" th:href="@{/charts/getCharts}" class="nav-link">
+                    <i class="iconfont icon-total"></i> 统计分析
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+<!--进入用户面板-->
+<div class="row" style="margin-top: 40px;" th:fragment="footer">
+    <p class="col-xs-12 col-sm-12 text-center slogan" style="margin-bottom: 20px">
+        大学生英语考试系统！ </p>
+    <a th:href="@{/page/login}" target="_parent" class="col-xs-12 col-sm-12 text-center slogan"
+       href="admin/adminLogin.html">进入用户面板</a>
+</div>
+</body>
+</html>

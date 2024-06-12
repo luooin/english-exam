@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="student::header"></head>
+<section>
+    <script>
+
+        //分页查询
+        getExamListByPage = function (currentPage) {
+            var pageSize = $("#pageSize").val(); //每页显示条数
+            var exam_name = $("#exam_name").val();//试卷信息
+            var str = "/exam/exam/select?currentPage="+currentPage+"&pageSize="+ pageSize+"&exam_name="+ exam_name;
+            window.location.href = (str);
+        }
+
+        startExam = function (id,flag) {
+            if (flag == 0){
+                alert("试题未开放，等候老师开放！");
+                return;
+            }else {
+                // alert("试题开放");
+                $("#examId").val(id);
+                $("#modal-login").modal();
+            }
+        }
+        confirmExam = function () {
+            $.ajax({
+                type:"post",
+                url:"/exam/grade/login",
+                dataType:"json",
+                data:{
+                    examId:$("#examId").val(),
+                    username:$("#username").val()
+                },
+                success:function (data) {
+                    if (data == null){
+                        alert("系统出现错误，请联系管理员...");
+                    }else {
+                        $.each(data,function (key,value) {
+                            if (value=="success") {
+                                window.location.href = ("/exam/exam/getExam?exam_id=" + $("#examId").val());
+                            }else {
+                                alert(value);
+                                return;
+                            }
+                        });
+                    }
+                    $("#modal-login").modal('hide');
+                }
+            });
+        }
+    </script>
+</section>
+<body class="sidebar-fixed header-fixed">
+<div class="page-wrapper">
+    <!--顶部栏-->
+    <nav class="navbar page-header" th:include="student::student-navbar"></nav>
+
+    <div class="main-container">
+        <!--侧边栏-->
+        <div class="sidebar" th:include="student::student-sidebar"></div>
+
+        <div class="content">
+            <div class="col-md-4" style="margin-top: 30px;text-align: center">
+                <form th:action="@{/exam/select}" th:method="post">
+                    <div class="input-group">
+                        <label for="exam_name" style="font-size: 20px">试卷&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <input type="text" th:value="${exam_name}" id="exam_name" name="exam_name" class="form-control" placeholder="搜索试卷">
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-lg btn-primary">搜索</button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+            <div class="container-fluid">
+                <div class="row" style="margin-top: 100px">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-light">
+                                试卷列表
+                            </div>
+
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>序号</th>
+                                            <th>试卷名称</th>
+                                            <th>组卷类型</th>
+                                            <th>所需时间</th>
+                                            <th>发布者</th>
+                                            <th>试卷总分</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody th:each="exam,examStat:${pageInfo.list}">
+                                        <tr>
+                                            <td th:text="${pageInfo.startRow + examStat.index}">1</td>
+                                            <td class="text-nowrap" th:text="${exam.examName}">Samsung Galaxy S8</td>
+                                            <td th:text="${exam.examType}==0?'固定':'随机'">31,589</td>
+                                            <td th:text="${exam.needTime}+'分钟'">$800</td>
+                                            <td th:text="${exam.examAuthor}"></td>
+                                            <td th:text="${exam.examGrade}"></td>
+                                            <td>
+                                                <a id="start-btn" th:onclick="'javascript:startExam('+${exam.examId}+','+${exam.examFlag}+')'" class="btn btn-outline-primary" th:text="${exam.examFlag}==0?'未开始':'正在考试'">正在考试</a>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fixed-table-pagination" style="display: block;text-align: right" >
+                    <div class="pull-left pagination-detail">
+                        <span class="pagination-info">显示第 <span th:text="${pageInfo.startRow}"></span> 到第 <span th:text="${pageInfo.endRow}"></span> 条记录，总共 <span th:text="${pageInfo.total}"></span>条记录</span>
+                        <span class="page-list">每页显示
+                         <span class="page-size"  th:text="${pageInfo.pageSize}" id="pageSize"></span>
+                            <!--<span class="btn-group dropdown" style="">-->
+                            <!--<button type="button" class="btn btn-default  dropdown-toggle" data-toggle="dropdown">-->
+                            <!--<span class="page-size"  th:text="${pageInfo.pageSize}" id="pageSize"></span>-->
+                            <!--&lt;!&ndash;保存当前页&ndash;&gt;-->
+                            <!--<input type="hidden" id="pageNum" th:value="${pageInfo.pageNum}" />-->
+                            <!--<span class="caret"></span>-->
+                            <!--</button>-->
+                            <!--<ul class="dropdown-menu" role="menu">-->
+                            <!--<li  th:class="${pageInfo.pageSize== 5 }?'active':''"><a href="javascript:void(0)" th:onclick="'javascript:getUserListByPageSize('+5+')'" >5</a></li>-->
+                            <!--<li  th:class="${pageInfo.pageSize== 8 }?'active':''"><a href="javascript:void(0)" th:onclick="'javascript:getUserListByPageSize('+8+')'">8</a></li>-->
+                            <!--</ul>-->
+                            <!--</span>-->
+                        条记录
+	                </span>
+
+                    </div>
+                </div>
+                <nav aria-label="Page navigation" style="font-size: 20px;text-align: center">
+                    <ul class="pager" id="page">
+                        <li th:class="${pageInfo.hasPreviousPage}?'':'previous disabled'" style="display: inline">
+                            <!--<a th:href="@{/user/getAllUser(currentPage=${pageInfo.prePage})}" aria-label="Previous">-->
+                            <!--<span aria-hidden="true">&laquo;</span>-->
+                            <!--&lt;!&ndash;← Previous&ndash;&gt;-->
+                            <!--</a>-->
+                            <a href="javascript:void(0)" th:onclick="'javascript:getExamListByPage('+${pageInfo.prePage}+');'" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                <!--← Previous-->
+                            </a>
+                        </li>
+                        <th:block th:each="nav:${pageInfo.navigatepageNums}">
+                            <li th:class="${nav==pageInfo.pageNum}?'active':''" style="display: inline">
+                                <a href="javascript:void(0)" th:onclick="'javascript:getExamListByPage('+${nav}+');'" th:text="${nav}"></a>
+                            </li>
+                        </th:block>
+                        <li th:class="${pageInfo.hasNextPage}?'':'next disabled'" style="display: inline">
+                            <!--<a th:href="@{/user/getAllUser(currentPage=${pageInfo.nextPage},condition=null,info=null)}" aria-label="Next">-->
+                            <!--&lt;!&ndash;Next →&ndash;&gt;-->
+                            <!--<span aria-hidden="true">&raquo;</span>-->
+                            <!--</a>-->
+                            <a href="javascript:void(0)" th:onclick="'javascript:getExamListByPage('+${pageInfo.nextPage}+');'" aria-label="Next">
+                                <!--Next →-->
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal-login" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary border-0">
+                <h5 class="modal-title text-white">用户登录</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body p-7">
+                <!--<div class="row"style="margin-bottom: 50px;">-->
+                    <!--<div class="col-md-12 text-center">-->
+                        <!--<h1 id="title"></h1>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <div class="row" style="margin-bottom: 100px;">
+                    <div class="col-md-6 col-md-offset-12" style="margin:0 auto">
+                        <!-- Start Sign In Form -->
+                            <div class="form-group" style="margin-top: 20px">
+                                <h4 class="form-title">请输入您的身份信息</h4>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <!--<label for="username" class="form-control-label">学号: </label>-->
+                                <input type="hidden" id="examId" value="" name="examId"/>
+                                <input id="username" type="text" class="form-control" placeholder="学号" required="required" autofocus="autofocus"/>
+                            </div>
+                        <!-- END Sign In Form -->
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success" th:onclick="'javascript:confirmExam()'">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
