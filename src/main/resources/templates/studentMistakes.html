@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="student::header"></head>
+<section>
+    <script>
+        //修改model
+        seeModel = function (modelId) {
+            $.ajax({
+                type: "POST",
+                data: {modelId: modelId},
+                url: "/exam/model/getModel",
+                dataType: "json",
+                success: function (data) {
+                    if (data == null) {
+                        window.location.href = ("/exam/model/select");
+                    } else {
+                        $("#modelId").val(data.model.modelId);
+                        $("#title").val(data.model.title);
+                        $("#type").val(data.model.type);
+                        $("#answer").val(data.model.answer);
+                        $("#analysis").val(data.model.analysis);
+                        $("#difficulty").val(data.model.difficulty);
+                        $("#grade").val(data.model.grade);
+                        $("#modal-see").modal();
+                    }
+                }
+            });
+        }
+        seeConfirm = function () {
+            $.ajax({
+                type: "POST",
+                url: "/exam/model/update",
+                data: {
+                    modelId: $("#modelId").val(),
+                    title: $("#title").val(),
+                    answer: $("#answer").val(),
+                    analysis:$("#analysis").val(),
+                    difficulty: $("#difficulty").val(),
+                },
+                dataType: "json",
+                success: function (data) {
+                    if (data == null) {
+                        alert("修改失败！请联系管理员...");
+                    } else {
+                        $.each(data, function (key, value) {
+                            alert(value);
+                        })
+                    }
+                    $("#modal-update").modal('hide');
+                    window.location.href = ("/exam/model/select?type=");
+                }
+            });
+        }
+
+    </script>
+</section>
+<body class="sidebar-fixed header-fixed">
+<div class="page-wrapper">
+    <!--顶部栏-->
+    <nav class="navbar page-header" th:include="student::student-navbar"></nav>
+
+    <div class="main-container">
+        <!--侧边栏-->
+        <div class="sidebar" th:include="student::student-sidebar"></div>
+
+        <div class="content">
+            <div class="col-md-4" style="margin-top: 50px">
+                <div class="input-group">
+                    <label for="input-group-2" style="font-size: 20px">试题&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                    <input type="text" id="input-group-2" name="input1-group2" class="form-control"
+                           placeholder="请输入试题题目">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-lg btn-primary">
+                            <i class="fa"></i> 搜索
+                        </button>
+                    </span>
+                </div>
+            </div>
+
+            <div class="container-fluid" style="margin-top: 50px">
+                <div class="row">
+                    <label style="font-size: 20px">题型分类：&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card p-4">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <!-- <span class="h4 d-block font-weight-normal mb-2">54</span> -->
+                                    <span class="font-weight-normal" style="font-size: 20px">选词填空</span>
+                                </div>
+
+                                <div class="h2 text-muted">
+                                    <i class="icon icon-people"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card p-4">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <!-- <span class="h4 d-block font-weight-normal mb-2">$32,400</span> -->
+                                    <span class="font-weight-normal" style="font-size: 20px">长篇阅读</span>
+                                </div>
+
+                                <div class="h2 text-muted">
+                                    <i class="icon icon-clock"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card p-4">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <!-- <span class="h4 d-block font-weight-normal mb-2">900</span> -->
+                                    <span class="font-weight-normal" style="font-size: 20px">仔细阅读</span>
+                                </div>
+
+                                <div class="h2 text-muted">
+                                    <i class="icon icon-wallet"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card p-4">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <!-- <span class="h4 d-block font-weight-normal mb-2">900</span> -->
+                                    <span class="font-weight-normal" style="font-size: 20px">翻译</span>
+                                </div>
+
+                                <div class="h2 text-muted">
+                                    <i class="icon icon-wallet"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card p-4">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <!-- <span class="h4 d-block font-weight-normal mb-2">900</span> -->
+                                    <span class="font-weight-normal" style="font-size: 20px">写作</span>
+                                </div>
+
+                                <div class="h2 text-muted">
+                                    <i class="icon icon-wallet"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-light">
+                                错题列表
+                            </div>
+
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>序号</th>
+                                            <th>标题</th>
+                                            <th>类型</th>
+                                            <th>难度</th>
+                                            <th>所属试卷</th>
+                                            <th>分值</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody th:each="modelVo,modelVoStat:${list}">
+                                        <tr>
+                                            <td th:text="${modelVoStat.index+1}">1</td>
+                                            <td class="text-nowrap" th:text="${modelVo.model.title}">Samsung Galaxy S8</td>
+                                            <td th:text="${modelVo.type}">31,589</td>
+                                            <td th:text="${modelVo.difficulty}">$800</td>
+                                            <td th:text="${modelVo.model.author}"></td>
+                                            <td th:text="${modelVo.model.grade}"></td>
+                                            <td>
+                                                <button id="update-btn" class="btn btn-outline-primary"
+                                                        th:onclick="'javascript:seeModel('+${modelVo.model.modelId}+');'">查看
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal-see" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary border-0">
+                <h5 class="modal-title text-white">试题修改</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!--输入框-->
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label for="modelId" class="form-control-label">序号</label>
+                            <input id="modelId" class="form-control" value="" readonly/>
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="form-control-label">标题</label>
+                            <input id="title" class="form-control" value=""/>
+                        </div>
+                        <div class="form-group">
+                            <label for="type">类型</label>
+                            <select name="type" id="type" class="form-control" required>
+                                <option value="1">选词填空</option>
+                                <option value="2">段落匹配</option>
+                                <option value="3">仔细阅读</option>
+                                <option value="4">翻译</option>
+                                <option value="5">写作</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="answer" class="form-control-label">答案</label>
+                            <textarea id="answer" class="form-control" value="" rows="10"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="analysis" class="form-control-label">解析</label>
+                            <textarea id="analysis" class="form-control" value="" rows="10"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="difficulty">难度</label>
+                            <select id="difficulty" class="form-control">
+                                <option value="0">简单</option>
+                                <option value="1">一般</option>
+                                <option value="2">困难</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="grade" class="form-control-label">分值</label>
+                            <input id="grade" class="form-control" value="" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" th:onclick="'javascript:seeConfirm()'">Continue
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

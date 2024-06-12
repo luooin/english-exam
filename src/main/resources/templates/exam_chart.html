@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="admin::header">
+</head>
+<section>
+    <script>
+        //分页查询
+        getExamListByPage = function (currentPage) {
+            var pageSize = $("#pageSize").val(); //每页显示条数
+            var str = "/exam/charts/getCharts?currentPage="+currentPage+"&pageSize="+ pageSize;
+            window.location.href = (str);
+        }
+    </script>
+</section>
+<body class="sidebar-fixed header-fixed">
+<div class="page-wrapper">
+    <!--导入上边栏-->
+    <nav class="navbar page-header" th:include="admin::admin-navbar"></nav>
+
+    <div class="main-container">
+        <!--导入侧边栏-->
+        <div class="sidebar" th:include="admin::admin-sidebar"></div>
+
+        <div class="content">
+            <h1 style="text-align: center;font-size: 30px;margin-bottom: 50px">统计分析</h1>
+            <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+            <div id="main" style="width: 100%;height:400px;"></div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-light">
+                            试卷统计
+                        </div>
+
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>试卷名称</th>
+                                        <th>组卷类型</th>
+                                        <th>所需时间(分钟)</th>
+                                        <th>发布者</th>
+                                        <th>试卷总分</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody th:each="exam,examStat:${pageInfo.list}">
+                                    <tr>
+                                        <td th:text="${pageInfo.startRow + examStat.index}">1</td>
+                                        <td class="text-nowrap" th:text="${exam.examName}">Samsung Galaxy S8</td>
+                                        <td th:text="${exam.examType}==0?'固定':'随机'">31,589</td>
+                                        <td th:text="${exam.needTime}+'分钟'">$800</td>
+                                        <td th:text="${exam.examAuthor}"></td>
+                                        <td th:text="${exam.examGrade}"></td>
+                                        <td>
+                                            <a id="update-btn" class="btn btn-outline-primary" th:href="@{/charts/getGradeByExamId(condition=null,info=null,examId=${exam.examId})}">查看详情</a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="fixed-table-pagination" style="display: block;text-align: right" >
+                <div class="pull-left pagination-detail">
+                    <span class="pagination-info">显示第 <span th:text="${pageInfo.startRow}"></span> 到第 <span th:text="${pageInfo.endRow}"></span> 条记录，总共 <span th:text="${pageInfo.total}"></span>条记录</span>
+                    <span class="page-list">每页显示
+                         <span class="page-size"  th:text="${pageInfo.pageSize}" id="pageSize"></span>条记录
+	                </span>
+
+                </div>
+            </div>
+            <nav aria-label="Page navigation" style="font-size: 20px;text-align: center">
+                <ul class="pager" id="page">
+                    <li th:class="${pageInfo.hasPreviousPage}?'':'previous disabled'" style="display: inline">
+                        <a href="javascript:void(0)" th:onclick="'javascript:getExamListByPage('+${pageInfo.prePage}+');'" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <!--← Previous-->
+                        </a>
+                    </li>
+                    <th:block th:each="nav:${pageInfo.navigatepageNums}">
+                        <li th:class="${nav==pageInfo.pageNum}?'active':''" style="display: inline">
+                            <a href="javascript:void(0)" th:onclick="'javascript:getExamListByPage('+${nav}+');'" th:text="${nav}"></a>
+                        </li>
+                    </th:block>
+                    <li th:class="${pageInfo.hasNextPage}?'':'next disabled'" style="display: inline">
+                        <a href="javascript:void(0)" th:onclick="'javascript:getExamListByPage('+${pageInfo.nextPage}+');'" aria-label="Next">
+                            <!--Next →-->
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main'));
+
+    // 指定图表的配置项和数据
+    // 显示标题，图例和空的坐标轴
+    myChart.setOption({
+        title: {
+            text: '试卷的平均成绩'
+        },
+        tooltip: {},
+        legend: {
+            data:['平均成绩']
+        },
+        xAxis: {
+            data: []
+        },
+        yAxis: {},
+        series: [{
+            name: '平均成绩',
+            type: 'bar',
+            data: []
+        }]
+    });
+
+    // 异步加载数据
+    $.get('/exam/charts/getGrade').done(function (data) {
+        var examData = [];
+        var averageData = [];
+        $.each(data,function (index,item) {
+            examData.push(item.exam.examName);
+            averageData.push(item.average);
+        })
+        // 填入数据
+        myChart.setOption({
+            xAxis: {
+                data: examData
+            },
+            series: [{
+                // 根据名字对应到相应的系列
+                name: '平均成绩',
+                data: averageData
+            }]
+        });
+    });
+</script>
+</body>
+</html>

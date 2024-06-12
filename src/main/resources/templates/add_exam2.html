@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:include="admin::header"></head>
+<body class="sidebar-fixed header-fixed">
+<div class="page-wrapper">
+    <!--导入上边栏-->
+    <nav class="navbar page-header" th:include="admin::admin-navbar"></nav>
+    <div class="main-container">
+        <!--导入侧边栏-->
+        <div class="sidebar" th:include="admin::admin-sidebar"></div>
+        <div class="content">
+            <div class="container-fluid">
+                <h1 style="text-align: center">新增试卷</h1>
+                <form th:action="@{/exam/add}" method="post">
+                    <div class="row">
+                        <div class="col-md-4" style="font-size: 20px">
+                            <div class="form-group">
+                                <label for="exam_name" class="form-control-label">试卷名称</label>
+                                <input name="exam_name" id="exam_name" class="form-control" value=""
+                                       placeholder="请输入试卷名称" required>
+                            </div>
+                            <div class="col-md-6 mb-4 open">
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="false">Home</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link active" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="true">Profile</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#messages" role="tab" aria-controls="messages" aria-selected="false">Messages</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane" id="home" role="tabpanel">
+                                        1. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+                                        dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                    </div>
+
+                                    <div class="tab-pane active" id="profile" role="tabpanel">
+                                        2. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+                                        dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                    </div>
+
+                                    <div class="tab-pane" id="messages" role="tabpanel">
+                                        3. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+                                        dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="exam_type">组卷类型</label>
+                                <select name="exam_type" id="exam_type" class="form-control" required>
+                                    <option value="0">随机组卷</option>
+                                    <option value="1">手动导入</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="margin-top: 35px">
+                                <div class="mb-4">
+                                    <button class="btn btn-primary" type="submit">保存</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

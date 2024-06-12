@@ -1,0 +1,167 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="admin::header"></head>
+<section>
+    <script>
+        //提交试题
+        saveExam = function (num,size) {
+            CKupdate();//在提交表单前需要做以上处理
+            $.ajax({
+                type:"post",
+                url:"/exam/exam/saveExam",
+                dataType:"json",
+                data:{
+                    num:num,
+                    answer:$("#answer").val()
+                },
+                success:function (data) {
+                    if (data == null){
+                        alert("系统异常，请联系管理员...");
+                    }else {
+                        $.each(data,function (key,value) {
+                            alert(value);
+                        });
+                        window.location.href = ("/exam/page/studentTable");
+                    }
+                }
+            });
+        }
+
+        submitExam = function (gradeId) {
+            if ($("#score").val()==""){
+                alert("总分数不能为空！");
+                return;
+            }
+            $.ajax({
+                type:"post",
+                url:"/exam/grade/updateGrade",
+                dataType:"json",
+                data:{
+                    gradeId:gradeId,
+                    score:$("#score").val()
+                },
+                success:function (data) {
+                    if (data == null){
+                        alert("判卷失败，请联系管理员...");
+                    } else {
+                        $.each(data,function (key,value) {
+                            alert(value);
+                            window.location.href = ("/exam/grade/getGradeVo");
+                        });
+                    }
+                }
+            });
+        }
+    </script>
+    <style type="text/css">
+        p{
+            margin-top: 10px;
+        }
+    </style>
+</section>
+<body class="sidebar-fixed header-fixed">
+<div class="page-wrapper">
+    <nav class="navbar page-header" th:include="admin::admin-navbar"></nav>
+    <div class="main-container">
+        <div class="sidebar" th:include="admin::admin-sidebar"></div>
+        <div class="content">
+            <div class="row">
+                <div class="col-md-12" style="margin-top: 50px;margin-bottom: 50px;font-size: 30px">
+                    <h1 th:text="${grade.title}">第一次模考</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="card">
+                        <div class="card-header bg-light">学号：</div>
+                        <div class="card-body" th:text="${grade.username}"></div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card">
+                        <div class="card-header bg-light">姓名：</div>
+                        <div class="card-body" th:text="${grade.name}"></div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card">
+                        <div class="card-header bg-light">班级：</div>
+                        <div class="card-body" th:text="${grade.groupName}"></div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card">
+                        <div class="card-header bg-light">所用时间：</div>
+                        <div class="card-body" th:text="${grade.spendTime}"></div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card">
+                        <div class="card-header bg-light">当前成绩：</div>
+                        <div class="card-body" th:text="${grade.score}"></div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card">
+                        <div class="card-header bg-light">最终成绩：</div>
+                        <div class="card-body">
+                            <input id="score" th:value="${grade.score}" type="text" class="form-control" placeholder="总分数" required="required"/>
+                            <button type="button" class="btn btn-primary" th:onclick="'javascript:submitExam('+${grade.gradeId}+')'">确定</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:each="recordVo,recordVoStat:${recordVoList}">
+                <div class="row" style="margin-bottom: 100px">
+                    <div class="col-xs-12 col-sm-7 col-md-8 col-lg-8 ie8-do-left">
+                        <div class="row question" qindex="0">
+                            <div class="col-xs-12  col-sm-12 col-md-12">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="row-box">
+                                            <p class="ques-title">
+                                                <span class="ques-number" th:text="${recordVoStat.index+1}" th:value="${recordVoStat.index+1}" id="key"> 1/8</span>
+                                                <span class="ques-type ques-single" th:text="${recordVo.type}">单选题</span><br />
+                                                标题：<span th:text="${recordVo.title}">下面一共有几个草莓？
+                                            <p style="text-indent: 30px;" th:utext="${recordVo.content}">
+                                                <!--<img src="https://userfile.youkaoshi.cn/images/userupload/1870291/20190213193040_p2xsow.jpg">-->
+                                                It was the first day of class. Two of her new ESL classmates wanted to know where Tara was from. They were both from Iraq. Because Tara looked Iraqi, one of the women asked Tara, in English, if she was from Iraq. Tara replied, "No, I'm not." Then the women took turns asking Tara if she was from Iran, or Syria, or Jordan. To each question, Tara responded with a simple no. Laughing, one woman said to the other, "She's not from anywhere!" The two went to their desks, talking to each other in Arabic.
+                                                The next day, the teacher divided the students into groups of four. The students in each group asked introductory questions of each other. A student in Tara's group asked her, "Where are you from?" Tara answered that she was from Iraq. The two women who had questioned Tara the day before were sitting only a few feet away. Both of them heard Tara's response.
+                                            </p>
+                                            </span>
+                                            分值（分）：<span class="ques-score" th:text="${recordVo.modelGrade}">(5分)</span>
+                                            </p>
+                                            <div class="ques-answers" th:utext="${recordVo.modelOption}">
+
+                                            </div>
+                                            <br><span style="font-size: 15px">参考答案：</span>
+                                            <br><textarea name="modelAnswer" id="modelAnswer" class="ckeditor form-control" th:utext="${recordVo.modelAnswer}" readonly></textarea>
+                                            <br><span style="font-size: 15px">考生答案：</span>
+                                            <textarea name="userAnswer" id="userAnswer" class="ckeditor form-control" th:utext="${recordVo.userAnswer}" readonly></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--系统信息-->
+            <div class="row" style="margin-top: 40px;">
+                <p class="col-xs-12 col-sm-12 text-center slogan">
+                    大学生考试系统 </p>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function(){
+        $('#myCarousel').on('slide.bs.carousel', function () {
+            alert("当调用 slide 实例方法时立即触发该事件。");
+        });
+    });
+</script>
+</body>
+</html>

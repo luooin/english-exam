@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:include="admin::header"></head>
+<section>
+    <script type="text/javascript">
+        CKEDITOR.replace("content");
+        CKEDITOR.replace("modelOption");
+        CKEDITOR.replace("answer");
+        CKEDITOR.replace("analysis");
+
+    </script>
+    <script>
+        //处理CKEDITOR的值
+        function CKupdate() {
+            for (instance in CKEDITOR.instances)
+                CKEDITOR.instances[instance].updateElement();
+        }
+        addModel = function () {
+            CKupdate();//在提交表单前需要做以上处理
+            if ($("#title").val() == ""){
+                alert("试题标题不能为空！");
+                return;
+            }
+            if ($("#content").val() == ""){
+                alert("试题内容不能为空！");
+                return;
+            }
+            if ($("#answer").val() == ""){
+                alert("试题答案不能为空！");
+                return;
+            }
+            $.ajax({
+                type:"POST",
+                url:"/exam/model/add",
+                dataType:"json",
+                data:$("#addForm").serialize(),
+                success:function (data) {
+                    if (data == null){
+                        alert("添加失败！请联系管理员...");
+                    } else {
+                        $.each(data,function (key,value) {
+                            alert(value);
+                        });
+                        window.location.href = ("/exam/page/addModel");
+                    }
+                }
+            });
+        }
+    </script>
+</section>
+<body class="sidebar-fixed header-fixed">
+<div class="page-wrapper">
+    <!--导入上边栏-->
+    <nav class="navbar page-header" th:include="admin::admin-navbar"></nav>
+    <div class="main-container">
+        <!--导入侧边栏-->
+        <div class="sidebar" th:include="admin::admin-sidebar"></div>
+        <div class="content">
+            <div class="container-fluid">
+                <h1 style="text-align: center;font-size: 30px">新增试题</h1>
+                <form id="addForm">
+                    <div class="row">
+                        <div class="col-md-4" style="font-size: 20px">
+                      <div class="form-group">
+                          <label for="title" class="form-control-label" style="margin-bottom: 10px">试题标题</label>
+                          <input name="title" id="title" class="form-control" value="" placeholder="请输入标题">
+                      </div>
+                      <div class="form-group">
+                          <label for="content" style="margin-bottom: 10px" >试题内容</label>
+                          <textarea name="content" id="content" class="ckeditor form-control" rows="10" placeholder="请输入试题" required></textarea>
+                      </div>
+                        <div class="form-group">
+                            <label for="modelOption" style="margin-bottom: 10px" >试题选项</label>
+                            <textarea name="modelOption" id="modelOption" class="ckeditor form-control" rows="10" placeholder="请输入试题选项" required></textarea>
+                        </div>
+                      <div class="form-group">
+                          <label for="answer" style="margin-bottom: 10px">试题答案</label>
+                          <label for="answer" style="font-size: 15px">(选择答案顺序用 | 隔开，写作翻译可直接粘贴参考答案)</label>
+                          <textarea name="answer" id="answer" class="ckeditor form-control" rows="6" placeholder="选择答案顺序用 | 隔开" required></textarea>
+                      </div>
+                      <div class="form-group">
+                          <label for="type" style="margin-bottom: 10px">试题类别</label>
+                          <select name="type" id="type" class="form-control" required>
+                              <option value="1">选词填空</option>
+                              <option value="2">段落匹配</option>
+                              <option value="3">仔细阅读</option>
+                              <option value="4">翻译</option>
+                              <option value="5">写作</option>
+                          </select>
+                      </div>
+                      <div class="form-group">
+                          <label for="analysis" style="margin-bottom: 10px">试题解析</label>
+                          <textarea name="analysis" id="analysis" class="ckeditor form-control" rows="10" placeholder="请输入解析"></textarea>
+                      </div>
+                      <div class="form-group">
+                          <label for="grade" style="margin-bottom: 10px">试题分值</label>
+                          <select name="grade" id="grade" class="form-control" required>
+                              <option value="35.5">35.5分</option>
+                              <option value="71">71分</option>
+                              <option value="106.5">106.5分</option>
+                          </select>
+                      </div>
+                      <div class="form-group">
+                          <label for="difficulty" style="margin-bottom: 10px">试题难度</label>
+                          <select name="difficulty" id="difficulty" class="form-control" required>
+                              <option value="0">简单</option>
+                              <option value="1">一般</option>
+                              <option value="2">困难</option>
+                          </select>
+                      </div>
+                      <div class="form-group" style="margin-top: 35px">
+                          <div class="mb-4">
+                              <button class="btn btn-primary" type="button" th:onclick="'javascript:addModel()'">保存</button>
+                          </div>
+                      </div>
+                  </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
