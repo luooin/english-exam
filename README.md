@@ -7,25 +7,38 @@
 
 ## 1.环境
 jdk1.8+mysql8
+前端初始化指令：
+> npm install
+
+前端运行指令：
+> npm run serve
+
+详情可以查看这篇csdn博客：http://t.csdnimg.cn/kpuxS
 
 ## 2.项目展示
 + 考试详情页面
 
-![img.png](img.png)
+![image](https://github.com/luocong-shuaige/english-exam/assets/85004172/d6af9968-f689-4158-a752-0e27f7e10bcf)
+
 + 考试页面
 
-![img_1.png](img_1.png)
+![image](https://github.com/luocong-shuaige/english-exam/assets/85004172/4c7066c5-8b90-40a2-9b82-36111f1d5580)
+
 + 按钮栏页面
 
-![img_2.png](img_2.png)
+![image](https://github.com/luocong-shuaige/english-exam/assets/85004172/7e8e9cc9-56e7-4e2e-bfc3-09c03463977f)
+
 + 我的记录页面
 
-![img_3.png](img_3.png)
+![image](https://github.com/luocong-shuaige/english-exam/assets/85004172/2d31cc64-1d3e-4d30-b59d-c065527977d7)
+
 + 用户管理展示页面
 
-![img_4.png](img_4.png)
+![image](https://github.com/luocong-shuaige/english-exam/assets/85004172/ad88ad4f-8507-45de-b34d-60696bec6153)
+
 + 统计分析详情页面
 
-![img_5.png](img_5.png)
+![image](https://github.com/luocong-shuaige/english-exam/assets/85004172/b65b360a-3b6f-4926-af87-ee7fa438a50e)
+
 
 有偿获得源码+Q：2369303335
