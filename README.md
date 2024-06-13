@@ -7,6 +7,7 @@
 
 ## 1.环境
 jdk1.8+mysql8
+
 前端初始化指令：
 > npm install
 
