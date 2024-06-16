@@ -11,7 +11,7 @@
  Target Server Version : 80028
  File Encoding         : 65001
 
- Date: 10/04/2023 11:25:54
+ Date: 14/04/2023 20:26:09
 */
 
 SET NAMES utf8mb4;
@@ -56,7 +56,7 @@ CREATE TABLE `exam`  (
   `model_ids` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '试题ids',
   `exam_flag` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否开始考试（默认未开始0，开始1）',
   PRIMARY KEY (`exam_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 24 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of exam
@@ -99,12 +99,12 @@ CREATE TABLE `grade`  (
   `create_time` timestamp(0) NOT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` timestamp(0) NOT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   PRIMARY KEY (`grade_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of grade
 -- ----------------------------
-INSERT INTO `grade` VALUES (2, 'tom', 'tom', '第一次模考', '15070842', '0天0小时1分37秒', 227.20, 3, 0, '2019-03-16 17:49:45', '2019-03-16 17:49:45');
+INSERT INTO `grade` VALUES (2, 'tom', 'tom', '第一次模考', '15070842', '0天0小时1分37秒', 227.20, 3, 1, '2023-04-14 19:30:58', '2023-04-14 19:30:58');
 INSERT INTO `grade` VALUES (3, '01', '张三', '第一次模考', '15070842', '0天0小时1分14秒', 159.75, 3, 1, '2019-03-18 15:00:12', '2019-03-18 15:00:12');
 INSERT INTO `grade` VALUES (4, '01', '张三', '第四次测试', '15070842', '0天0小时1分45秒', 220.10, 14, 0, '2019-03-21 11:42:20', '2019-03-21 11:42:20');
 INSERT INTO `grade` VALUES (5, '111', '李四', '第四次测试', '15070842', '0天0小时7分29秒', 220.10, 14, 0, '2019-03-21 11:49:01', '2019-03-21 11:49:01');
@@ -113,6 +113,7 @@ INSERT INTO `grade` VALUES (7, '666', '666', '第四次测试', '15070842', '0�
 INSERT INTO `grade` VALUES (8, '777', '777', '第四次测试', '15070842', '0天0小时9分40秒', 3.55, 14, 0, '2019-03-21 12:01:13', '2019-03-21 12:01:13');
 INSERT INTO `grade` VALUES (9, '111', '李四', '第一次模考', '15070842', '0天0小时1分45秒', 220.10, 3, 0, '2019-03-21 15:10:33', '2019-03-21 15:10:33');
 INSERT INTO `grade` VALUES (10, '666', '666', '第一次模考', '15070842', '0天0小时2分27秒', 3.55, 3, 0, '2019-03-21 15:20:11', '2019-03-21 15:20:11');
+INSERT INTO `grade` VALUES (11, 'user', '李四', 'test随机', '15070842', '0天2小时48分29秒', 50.00, 22, 1, '2023-04-14 19:33:56', '2023-04-14 19:33:56');
 
 -- ----------------------------
 -- Table structure for group
@@ -152,7 +153,7 @@ CREATE TABLE `model`  (
   `create_time` timestamp(0) NOT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` timestamp(0) NOT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   PRIMARY KEY (`model_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 61 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 62 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of model
@@ -277,6 +278,12 @@ INSERT INTO `record` VALUES (70, '666', '666', 3, 18, '<p>速度快凡发生的�
 INSERT INTO `record` VALUES (71, '666', '666', 3, 19, '<p>dasdsasadsadsadsad</p>', '2019-03-21 15:20:07', '2019-03-21 15:20:07');
 INSERT INTO `record` VALUES (72, '666', '666', 3, 20, '<p>adssadsad【sadsaldasdsadsad</p>', '2019-03-21 15:20:07', '2019-03-21 15:20:07');
 INSERT INTO `record` VALUES (73, '666', '666', 3, 21, '<p>adsadasdsadsadsadsads</p>', '2019-03-21 15:20:07', '2019-03-21 15:20:07');
+INSERT INTO `record` VALUES (113, 'user', '李四', 22, 22, '', '2023-04-14 11:20:00', '2023-04-14 11:20:00');
+INSERT INTO `record` VALUES (114, 'user', '李四', 22, 30, '<p>vfv</p>', '2023-04-14 11:20:00', '2023-04-14 11:20:00');
+INSERT INTO `record` VALUES (115, 'user', '李四', 22, 39, '<p>vfdv</p>', '2023-04-14 11:20:00', '2023-04-14 11:20:00');
+INSERT INTO `record` VALUES (116, 'user', '李四', 22, 18, '<p>vfd</p>', '2023-04-14 11:20:00', '2023-04-14 11:20:00');
+INSERT INTO `record` VALUES (117, 'user', '李四', 22, 47, NULL, '2023-04-14 11:20:00', '2023-04-14 11:20:00');
+INSERT INTO `record` VALUES (118, 'user', '李四', 22, 59, NULL, '2023-04-14 11:20:00', '2023-04-14 11:20:00');
 
 -- ----------------------------
 -- Table structure for type
@@ -311,7 +318,7 @@ CREATE TABLE `user`  (
   `createtime` timestamp(0) NOT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `updatetime` timestamp(0) NOT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of user
